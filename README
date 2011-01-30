@@ -1,15 +1,13 @@
 # django-cart
 
-Django-cart is a small, focused shopping cart meant to be integrated into 
-custom django e-commerce solutions. If you're looking for something more
-robust, take a look at Satchmo; however, note that Satchmo has a pretty steep
-learning curve, and, in my opinion, isn't very Django-like.
+Django-cart is a small, focused shopping cart meant to be integrated into custom django e-commerce solutions. If you're looking for something more robust, take a look at Satchmo; however, note that Satchmo has a pretty steep learning curve, and, in [the original author of django-cart's] opinion, isn't very Django-like.
 
-# Todos
+# Why we forked
 
-django-cart currently works pretty well but requires you to write 
-implementation views for each project. I'd like to eventually have built-in
-view that would allow you to simply route URLs to this pluggable and have
-it automagically update the cart tables in your project's database. I don't 
-have the Django chops to pull that off right now, so if anyone is interested 
-in helping, I'd welcome any contributions.
+Initially, we had just copied the code into our own SVN repo.  That was kind of silly.  Other than that, after a few months, we have 45,000 empty carts in the database.  Sure, we could write a cron script to take care of old ones, but it seems that a Django app should be taking care of its own garbage collection.  Also, please note that it was our code causing all the carts.  Don't want to blame that on the original cart authors.
+
+# What we changed
+
+1)  Added a few convenience functions
+2)  Added cart.cart.cart_processor so we always have a reference to the cart in our templates
+3)  Prettied up the admin
