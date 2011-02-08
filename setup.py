@@ -29,14 +29,14 @@ for scheme in INSTALL_SCHEMES.values():
 # an easy way to do this.
 packages, data_files = [], []
 root_dir = os.path.dirname(__file__)
-cart_dir = os.path.join(root_dir, 'cart')
+app_dir = os.path.join(root_dir, 'cart')
 pieces = fullsplit(root_dir)
 if pieces[-1] == '':
 	len_root_dir = len(pieces) - 1
 else:
 	len_root_dir = len(pieces)
 
-for dirpath, dirnames, filenames in os.walk(cart_dir):
+for dirpath, dirnames, filenames in os.walk(app_dir):
 	# Ignore dirnames that start with '.'
 	for i, dirname in enumerate(dirnames):
 		if dirname.startswith('.'): del dirnames[i]
@@ -50,7 +50,8 @@ setup(
 	version='1.0.0',
 	description='This is a fork of Django-Cart.',
 	url='http://github.com/manfredmacx/django-cart/',
-	packages=packages,
+	packages=['cart', 'cart.migrations'],
+	data_files = data_files,
 	classifiers= ['Development Status :: 3 - Alpha',
 					'Environment :: Web Environment',
 					'Framework :: Django',
