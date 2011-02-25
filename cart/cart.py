@@ -32,26 +32,37 @@ class Cart:
 		return cart
 
 	def add(self, product, unit_price, quantity=1, variation=''):
-		try:
-			item = models.Item.objects.get(cart=self.cart, product=product,)
-		except models.Item.DoesNotExist:
-			item = models.Item()
-			item.cart = self.cart
-			item.product = product
-			item.unit_price = unit_price
-			item.quantity = quantity
+		items = models.Item.objects.filter(cart=self.cart, object_id=product.pk)
+		foundIt = False
+		for item in items:
+			#iteramos cada uno...
+			#print 'ITEM RETURNED: %s | %s | %s '%(item.product.nombre,item.variations,item.pk)
+			if variation == item.variations:
+				#Its EXACTLY THE SAME combination. increment it
+				#print '[  EQUAL  ] Item variation = %s | passed variation:%s'%(item.variations, variation)
+				item.quantity += quantity
+				item.save() #The item is inside the for loop... thats why we save it here
+				foundIt = True
+				break #exit the for loop because we found an exact match... and it should not be another (duplicated item and variation)
+		#print "For loop finished!"
+		if not foundIt:
+			#hey, the for loop cycle is completed and we did not found the item...
+			#add a new combination (example, Size:Large, Color:red)
+			item = models.Item() # Create a new one because it is different in variation.
 			item.variations = variation #saves the variation string...
+			item.quantity = quantity
+			item.unit_price = unit_price
+			item.product = product #the same product...
+			item.cart = self.cart
 			item.save()
-		else:
-            #is the same variation the added one? or a different variation?
-            #it could be a mix of variations, since it can be more than one.
-            if variation == item.variations:
-                #Its EXACTLY THE SAME combination. increment it
-                item.quantity += quantity
-            else:
-                #add a new combination (example, Size:Large, Color:red)
-                item.variations = variation #saves the variation string...
-			item.save()
+		#else: #item does not exists
+			#item = models.Item()
+			#item.cart = self.cart
+			#item.product = product
+			#item.unit_price = unit_price
+			#item.quantity = quantity
+			#item.variations = variation #saves the variation string...
+			#item.save()
 
 	def remove(self, item):
         #here we dont worry about variations.
