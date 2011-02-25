@@ -72,7 +72,8 @@ class Cart:
 			raise ItemDoesNotExist
 		else:
 			item.delete()
-	
+
+	#TODO: MODIFY THIS TO SUPPORT MULTIPLE ITEMS WITH ITS VARIATIONS
 	def update(self, product, unit_price, quantity, variation=''):
 		try:
 			item = models.Item.objects.get(
