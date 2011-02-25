@@ -11,3 +11,8 @@ Initially, we had just copied the code into our own SVN repo.  That was kind of 
 1)  Added a few convenience functions
 2)  Added cart.cart.cart_processor so we always have a reference to the cart in our templates
 3)  Prettied up the admin
+
+
+#My fork (Miguel Chavez)
+
+I need to add an extra field to the Items model. To support variations saved in the cart item.
