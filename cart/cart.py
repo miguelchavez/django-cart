@@ -64,10 +64,10 @@ class Cart:
 			#item.variations = variation #saves the variation string...
 			#item.save()
 
-	def remove(self, item):
-        #here we dont worry about variations.
+	def remove(self, item_id):
+		#here we dont worry about variations.
 		try:
-			item = models.Item.objects.get(pk=item.pk)
+			item = models.Item.objects.get(pk=item_id)
 		except models.Item.DoesNotExist:
 			raise ItemDoesNotExist
 		else:
