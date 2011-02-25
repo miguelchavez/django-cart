@@ -30,6 +30,8 @@ class Item(models.Model):
 	# product as generic relation
 	content_type = models.ForeignKey(ContentType)
 	object_id = models.PositiveIntegerField()
+	#We need to save the user selected product variation/details. These are 0 or more variations.
+	variations = models.CharField(max_length=255) #  ( {'detail_id': detail_selected_value_id} ) Example: {'Size':'Large'} but instead of words, there were be id's
 	
 	objects = ItemManager()
 	
