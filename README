@@ -22,4 +22,4 @@ This is what I added/changed:
 1)  The variations field is a CharField. It is saved as a list of "variation:attribute" splitted by a comma. 
     Example:  "1:3,2:1" Which means "Variation.pk is 1 and Attribute.pk is 3","Variation.pk is 2 and Attribute.pk is 1"
     And can be interpreted (get values from database for each attribute/variation): "Color:Red,Size:Small"
-2)  item.add() has an extra argument called "variations" at the end : add(self, product, unit_price, quantity=1, variation='')  
+2)  cart.add() has an extra argument called "variations" at the end : add(self, product, unit_price, quantity=1, variation='')  
