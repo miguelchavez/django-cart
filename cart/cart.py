@@ -73,21 +73,23 @@ class Cart:
 		else:
 			item.delete()
 
-	#TODO: MODIFY THIS TO SUPPORT MULTIPLE ITEMS WITH ITS VARIATIONS
-	def update(self, product, unit_price, quantity, variation=''):
-		try:
-			item = models.Item.objects.get(
-				cart=self.cart,
-				product=product,
-			)
-			item.cart = self.cart
-			item.product = product
-			item.unit_price = unit_price
-			item.quantity = quantity
-			item.variations = variation #if no variation is passed, the default is empty.
-			item.save(force_update = True)
-		except models.Item.DoesNotExist:
-			raise ItemDoesNotExist
+	#This will only update the item qty (the item is the cart-item id, not the product)
+	#this in order to support multiple product with variations
+	#I dont need to update prices.
+	def update(self, item_id, quantity):
+		if item_id > 0:
+			try:
+				item = models.Item.objects.get(cart=self.cart, pk=item_id)
+				if (quantity <= 0):
+					item.delete()
+				else:
+					item.quantity = quantity
+					item.save(force_update = True)
+			except models.Item.DoesNotExist:
+				print "ITEM TO UPDATE DOES NOT EXISTS [%d]"%item_id
+				raise ItemDoesNotExist
+		else:
+			print "ITEM ID passed was ZERO. Unable to update"
 	
 	def clear(self):
 		for item in self.cart.item_set.all():
