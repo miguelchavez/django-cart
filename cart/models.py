@@ -5,7 +5,7 @@ from django.contrib.contenttypes import generic
 
 class Cart(models.Model):
 	creation_date = models.DateTimeField(verbose_name=_('creation date'))
-	checked_out = models.BooleanField(default=False, verbose_name=_('checked out'))
+	checked_out   = models.BooleanField(default=False, verbose_name=_('checked out'))
 	
 	class Meta:
 		verbose_name = _('cart')
@@ -27,6 +27,7 @@ class Item(models.Model):
 	cart = models.ForeignKey(Cart, verbose_name=_('cart'))# the verbose_name could be 'cartItem'
 	quantity = models.PositiveIntegerField(verbose_name=_('quantity'))
 	unit_price = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('unit price'))
+	unit_weight= models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_('unit weight')) #if equals ZERO, do not use weight
 	# product as generic relation
 	content_type = models.ForeignKey(ContentType)
 	object_id = models.PositiveIntegerField()
@@ -46,6 +47,10 @@ class Item(models.Model):
 	def total_price(self):
 		return self.quantity * self.unit_price
 	total_price = property(total_price)
+
+	def total_weight(self):
+		return self.quantity * self.unit_weight
+	total_weight = property(total_weight)
 	
 	# product
 	def get_product(self):

@@ -31,7 +31,7 @@ class Cart:
 		request.session[CART_ID] = cart.id
 		return cart
 
-	def add(self, product, unit_price, quantity=1, variation=''):
+	def add(self, product, unit_price, quantity=1, unit_weight=0, variation=''):
 		items = models.Item.objects.filter(cart=self.cart, object_id=product.pk)
 		foundIt = False
 		for item in items:
@@ -52,6 +52,7 @@ class Cart:
 			item.variations = variation #saves the variation string...
 			item.quantity = quantity
 			item.unit_price = unit_price
+			item.unit_weight = unit_weight
 			item.product = product #the same product...
 			item.cart = self.cart
 			item.save()
@@ -75,7 +76,7 @@ class Cart:
 
 	#This will only update the item qty (the item is the cart-item id, not the product)
 	#this in order to support multiple product with variations
-	#I dont need to update prices.
+	#I dont need to update prices nor weights.
 	def update(self, item_id, quantity):
 		if item_id > 0:
 			try:
@@ -115,12 +116,22 @@ class Cart:
 		for item in self.cart.item_set.all():
 			total += item.total_price
 		return total
+
+	def total_weigth(self):
+		tw = 0
+		for item in self.cart.item_set.all():
+			tw += item.total_weigth
+		return tw
 		
 	def itemCount(self):
 		total = 0
 		for item in self.cart.item_set.all():
 			total += item.quantity
 		return total
+
+	def num_packages(self, maxPorPaquete):
+		num = self.itemCount() / maxPorPaquete
+		#FIXME: CONVERTIR / REDONDEAR A ENTERO!!!
 		
 	def hasItems(self):
 		return self.itemCount() > 0
