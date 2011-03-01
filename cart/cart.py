@@ -134,7 +134,7 @@ class Cart:
 		num = self.itemCount() / maxPorPaquete
 		print "Numero de paquetes:%s"%num
 		#FIXME: CONVERTIR / REDONDEAR A ENTERO!!!
-		return round(num)
+		return int(round(num))
 		
 	def hasItems(self):
 		return self.itemCount() > 0
