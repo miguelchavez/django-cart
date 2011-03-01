@@ -117,7 +117,7 @@ class Cart:
 			total += item.total_price
 		return total
 
-	def total_weigth(self):
+	def total_weight(self):
 		tw = 0
 		for item in self.cart.item_set.all():
 			tw += item.total_weigth
