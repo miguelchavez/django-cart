@@ -49,7 +49,6 @@ class Item(models.Model):
 	total_price = property(total_price)
 
 	def total_weight(self):
-		print "ITEM TOTAL WEIGHT: %s  -  %s * %s"%(self.product.nombre,self.quantity, self.unit_weight)
 		return self.quantity * self.unit_weight
 	total_weight = property(total_weight)
 	

@@ -121,7 +121,6 @@ class Cart:
 		tw = 0
 		for item in self.cart.item_set.all():
 			tw += item.total_weight
-		print "TOTAL WEIGHT: %s"%tw
 		return tw
 		
 	def itemCount(self):
@@ -132,8 +131,6 @@ class Cart:
 
 	def num_packages(self, maxPorPaquete):
 		num = self.itemCount() / maxPorPaquete
-		print "Numero de paquetes:%s"%num
-		#FIXME: CONVERTIR / REDONDEAR A ENTERO!!!
 		return int(round(num))
 		
 	def hasItems(self):
