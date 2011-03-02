@@ -131,7 +131,12 @@ class Cart:
 
 	def num_packages(self, maxPorPaquete):
 		num = self.itemCount() / maxPorPaquete
-		return int(round(num))
+		#we want to round to up not to down. Example: round(1.2) rounds to 1.0 and we want round to 2.0
+		intPart = int(num)
+		decPart = num - intPart
+		if decPart >= 0.1:
+			intPart += 1
+		return intPart
 		
 	def hasItems(self):
 		return self.itemCount() > 0
