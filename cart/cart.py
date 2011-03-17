@@ -36,10 +36,8 @@ class Cart:
 		foundIt = False
 		for item in items:
 			#iteramos cada uno...
-			#print 'ITEM RETURNED: %s | %s | %s '%(item.product.nombre,item.variations,item.pk)
 			if variation == item.variations:
 				#Its EXACTLY THE SAME combination. increment it
-				#print '[  EQUAL  ] Item variation = %s | passed variation:%s'%(item.variations, variation)
 				item.quantity += quantity
 				item.save() #The item is inside the for loop... thats why we save it here
 				foundIt = True
@@ -122,7 +120,13 @@ class Cart:
 		for item in self.cart.item_set.all():
 			tw += item.total_weight
 		return tw
-		
+
+
+	def itemLines(self):
+		total = 0
+		total = self.cart.item_set.count()
+		return total
+
 	def itemCount(self):
 		total = 0
 		for item in self.cart.item_set.all():
