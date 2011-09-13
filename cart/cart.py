@@ -1,6 +1,9 @@
 import datetime
 import models
 
+import decimal
+from decimal import *
+
 CART_ID = 'CART-ID'
 
 class ItemAlreadyExists(Exception):
@@ -149,12 +152,13 @@ class Cart:
 		return total
 
 	def num_packages(self, maxPorPaquete):
-		num = self.itemCount() / maxPorPaquete
+		num = self.itemCount() / Decimal(maxPorPaquete) #We need one of the operands to be decimal in order to get a decimal result.
 		#we want to round to up not to down. Example: round(1.2) rounds to 1.0 and we want round to 2.0
 		intPart = int(num)
 		decPart = num - intPart
 		if decPart >= 0.1:
 			intPart += 1
+		#print 'carrito. count/max=%s   count:%s, maxPorPaquete:%s, decPart:%s, intPart:%s'%(num, self.itemCount(), maxPorPaquete, decPart, intPart)
 		return intPart
 		
 	def hasItems(self):
