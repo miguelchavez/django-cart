@@ -68,7 +68,8 @@ class Cart:
 		try:
 			item = models.Item.objects.get(pk=item_id)
 		except models.Item.DoesNotExist:
-			raise ItemDoesNotExist
+			pass #Si ya no existe, entonces no es necesario quitarlo.
+		    #raise ItemDoesNotExist #Esto lanza un error 500. Como manejar esto para que al recargar la pagina con un GET para quitar un item que ya no existe en el carrito no muestre errores?
 		else:
 			item.delete()
 
@@ -86,7 +87,20 @@ class Cart:
 					item.save(force_update = True)
 			except models.Item.DoesNotExist:
 				print "ITEM TO UPDATE DOES NOT EXISTS [%d]"%item_id
-				raise ItemDoesNotExist
+				#raise ItemDoesNotExist
+		else:
+			print "ITEM ID passed was ZERO. Unable to update"
+
+	def updatePriceAndWeight(self, item_id, price, weight):
+		if item_id > 0:
+			try:
+				item = models.Item.objects.get(cart=self.cart, pk=item_id)
+				item.unit_price = price
+				item.unit_weight= weight
+				item.save(force_update = True)
+			except models.Item.DoesNotExist:
+				print "ITEM TO UPDATE DOES NOT EXISTS [%d]"%item_id
+				#raise ItemDoesNotExist
 		else:
 			print "ITEM ID passed was ZERO. Unable to update"
 	
@@ -102,7 +116,8 @@ class Cart:
 			return item.quantity
 			
 		except models.Item.DoesNotExist:
-			raise ItemDoesNotExist
+			pass
+			#raise ItemDoesNotExist
 	
 	def checkout_cart(self):
 		self.cart.checked_out = True
