@@ -42,6 +42,10 @@ class Cart:
 			if variation == item.variations:
 				#Its EXACTLY THE SAME combination. increment it
 				item.quantity += quantity
+				#Now we need to get discounts for volume sale.
+				if product.descuento_por_volumen:
+					dpv = product.get_discount_for(item.quantity)
+					item.unit_price = unit_price - (unit_price*(dpv/100))
 				item.save() #The item is inside the for loop... thats why we save it here
 				foundIt = True
 				break #exit the for loop because we found an exact match... and it should not be another (duplicated item and variation)
@@ -52,19 +56,16 @@ class Cart:
 			item = models.Item() # Create a new one because it is different in variation.
 			item.variations = variation #saves the variation string...
 			item.quantity = quantity
-			item.unit_price = unit_price
+			#Now we need to get discounts for volume sale.
+			if product.descuento_por_volumen:
+				dpv = product.get_discount_for(item.quantity)
+				item.unit_price = unit_price - (unit_price*(dpv/100))
+			else:
+				item.unit_price = unit_price
 			item.unit_weight = unit_weight
 			item.product = product #the same product...
 			item.cart = self.cart
 			item.save()
-		#else: #item does not exists
-			#item = models.Item()
-			#item.cart = self.cart
-			#item.product = product
-			#item.unit_price = unit_price
-			#item.quantity = quantity
-			#item.variations = variation #saves the variation string...
-			#item.save()
 
 	def remove(self, item_id):
 		#here we dont worry about variations.
@@ -87,6 +88,16 @@ class Cart:
 					item.delete()
 				else:
 					item.quantity = quantity
+					#Now we need to get discounts for volume sale.
+					product = item.get_product()
+					if product.descuento_por_volumen:
+						dpv = product.get_discount_for(quantity)
+						if product.tieneDescuentoValido:
+							unit_price = product.precioConDescuento
+						else:
+							unit_price = product.precio
+						unit_price = Decimal(unit_price)
+						item.unit_price = unit_price - (unit_price*(dpv/100))
 					item.save(force_update = True)
 			except models.Item.DoesNotExist:
 				print "ITEM TO UPDATE DOES NOT EXISTS [%d]"%item_id
